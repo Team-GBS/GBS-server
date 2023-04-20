@@ -17,6 +17,10 @@ from rest_framework.permissions import AllowAny
 # 아래 클래스는 페이지 번호 및 페이지 크기를 기반으로 데이터를 자동으로 분할하고, 페이지네이션을 수행하는 데 
 # 필요한 모든 메서드와 속성을 제공합니다.
 from rest_framework.pagination import PageNumberPagination
+
+from rest_framework import generics
+from rest_framework.filters import SearchFilter
+
 class CustomPageNumberPagination(PageNumberPagination):
     page_size=20
 
@@ -54,3 +58,9 @@ class BookList(APIView):
         # 모든 데이터를 가져온 경우에는 직렬화된 책 데이터를 반환합니다.
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
+
+class BookListAPIView(generics.ListAPIView):
+    queryset = BOOK.objects.all()
+    serializer_class = BookSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['Title', 'Author', 'Publisher']
