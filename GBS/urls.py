@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from Book.views import BookList
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('books/', BookList.as_view(), name='book-list'), # 도서 목록 페이지
 ]
