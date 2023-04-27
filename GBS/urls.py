@@ -21,5 +21,5 @@ from Book.views import BookList,BookListAPIView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('books/', BookList.as_view(), name='book-list'), # 도서 목록 페이지
-    path('api/search/', BookListAPIView.as_view(), name='book_search_api'),
+    path('books/search/', BookListAPIView.as_view(), name='book_search_api'), # 검색 페이지
 ]
