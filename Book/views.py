@@ -21,6 +21,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
 
+# page_size 조정
 class CustomPageNumberPagination(PageNumberPagination):
     page_size=20
 
@@ -58,9 +59,25 @@ class BookList(APIView):
         # 모든 데이터를 가져온 경우에는 직렬화된 책 데이터를 반환합니다.
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
+        
 
+# Django REST framework에서 제공하는 `generics.ListAPIView` 클래스를 상속받아서 만들어진 `BookListAPIView` 클래스입니다.
+# 이 클래스는 책 리스트를 조회하는 APIView를 구현한 것입니다.
 class BookListAPIView(generics.ListAPIView):
+    # `BOOK` 모델에서 모든 책 객체를 가져옵니다.
     queryset = BOOK.objects.all()
+
+    # 책 객체를 JSON 형태로 직렬화하기 위해 `BookSerializer` 클래스를 사용합니다.
     serializer_class = BookSerializer
+
+    # 검색 기능을 추가하기 위해 `SearchFilter`를 사용합니다.
     filter_backends = [SearchFilter]
+
+    # 검색 필드를 설정합니다. 여기서는 `Title`, `Author`, `Publisher` 필드를 검색 대상으로 설정했습니다.
     search_fields = ['Title', 'Author', 'Publisher']
+
+# 따라서 이 APIView는 GET 메서드로 호출할 경우, 모든 책 리스트를 JSON 형태로 반환하며,
+# 검색 쿼리 파라미터가 포함된 경우 해당 쿼리와 일치하는 책 리스트만 반환합니다.
+
+
+
